@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            margin: 2rem;
+            background: #f9f9f4;
+            color: #1f2937;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        a {
+            color: #0b4f6c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Courses</h1>
+    {% if courses %}
+        {% for course in courses %}
+            <div class="card">
+                <h2><a href="{% url 'courses:course-detail' course.id %}">{{ course.title }}</a></h2>
+                <p>{{ course.description|default:"No description provided." }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No courses available yet. Create one from the admin site.</p>
+    {% endif %}
+</body>
+</html>
