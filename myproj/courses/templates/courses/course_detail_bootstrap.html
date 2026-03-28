@@ -1,0 +1,38 @@
+{% extends 'base_bootstrap.html' %}
+
+{% block title %}{{ course.title }} - Exam{% endblock %}
+
+{% block content %}
+<p class="mb-3"><a href="{% url 'courses:course-list' %}" class="link-secondary">Back to courses</a></p>
+<h1 class="h3 mb-2">{{ course.title }}</h1>
+<p class="text-secondary mb-4">{{ course.description }}</p>
+
+{% if course.questions.all %}
+    <form method="post" action="{% url 'courses:submit-exam' course.id %}">
+        {% csrf_token %}
+        {% for question in course.questions.all %}
+            <section class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Q{{ forloop.counter }}. {{ question.text }}</h2>
+                    {% for choice in question.choices.all %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" id="choice_{{ choice.id }}" name="question_{{ question.id }}" value="{{ choice.id }}">
+                            <label class="form-check-label" for="choice_{{ choice.id }}">
+                                {{ choice.text }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted mb-0">No choices configured for this question yet.</p>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Submit Exam</button>
+    </form>
+{% else %}
+    <div class="alert alert-warning mb-0" role="alert">
+        No questions added yet. Add questions and choices from the admin site.
+    </div>
+{% endif %}
+{% endblock %}

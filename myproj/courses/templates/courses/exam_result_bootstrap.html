@@ -1,0 +1,36 @@
+{% extends 'base_bootstrap.html' %}
+
+{% block title %}Exam Result{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Exam Result</h1>
+
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <p class="mb-2"><strong>Course:</strong> {{ submission.course.title }}</p>
+        <p class="mb-2"><strong>Submitted:</strong> {{ submission.submitted_at }}</p>
+        <p class="mb-2"><strong>Score:</strong> {{ submission.score }} / {{ submission.total_questions }}</p>
+        <p class="mb-0"><strong>Percentage:</strong> {{ submission.percentage|floatformat:2 }}%</p>
+    </div>
+</section>
+
+<h2 class="h5 mb-3">Answer Review</h2>
+{% if result_rows %}
+    <div class="list-group mb-4">
+        {% for row in result_rows %}
+            <article class="list-group-item list-group-item-action {% if row.is_correct %}list-group-item-success{% else %}list-group-item-danger{% endif %}">
+                <p class="mb-1"><strong>Question:</strong> {{ row.question }}</p>
+                <p class="mb-1"><strong>Your answer:</strong> {{ row.selected_choice|default:"Not answered" }}</p>
+                <p class="mb-1"><strong>Correct answer:</strong> {{ row.correct_choice|default:"Not configured" }}</p>
+                <p class="mb-0"><strong>Status:</strong> {% if row.is_correct %}Correct{% else %}Incorrect{% endif %}</p>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        No answer details available for this submission.
+    </div>
+{% endif %}
+
+<a href="{% url 'courses:course-list' %}" class="btn btn-outline-primary">Try another course</a>
+{% endblock %}

@@ -6,7 +6,7 @@ from .models import Course, Submission
 
 def course_list(request: HttpRequest) -> HttpResponse:
 	courses = Course.objects.all().order_by('title')
-	return render(request, 'courses/course_list.html', {'courses': courses})
+	return render(request, 'courses/course_list_bootstrap.html', {'courses': courses})
 
 
 def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
@@ -14,7 +14,7 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
 		Course.objects.prefetch_related('questions__choices'),
 		pk=course_id,
 	)
-	return render(request, 'courses/course_detail.html', {'course': course})
+	return render(request, 'courses/course_detail_bootstrap.html', {'course': course})
 
 
 def submit_exam(request: HttpRequest, course_id: int) -> HttpResponse:
@@ -87,4 +87,4 @@ def exam_result(request: HttpRequest, submission_id: int) -> HttpResponse:
 		'submission': submission,
 		'result_rows': result_rows,
 	}
-	return render(request, 'courses/exam_result.html', context)
+	return render(request, 'courses/exam_result_bootstrap.html', context)
